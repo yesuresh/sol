@@ -1,0 +1,121 @@
+#SOLUTION-1
+
+
+rm.files()
+
+getwd()
+
+pollutantmean <- function(directory, pollutant, id = 1:332) 
+{
+  
+  filelist <- list.files(path = "C:/Users/ganta.suresh.babu/Downloads/specdata",pattern = ".csv", full.names = TRUE)
+  
+  values <- numeric()
+  
+  for(i in id) 
+  {
+    
+    data <- read.csv(filelist[i])
+    
+    values <- c(values, data[[pollutant]])
+    
+  }
+  
+  mean(values, na.rm = TRUE)
+}
+
+# Result
+pollutantmean("specdata","pollutant")
+
+pollutantmean("specdata", "sulfate", 1:10)
+## [1] 4.064128
+pollutantmean("specdata", "nitrate", 70:72)
+## [1] 1.732979
+pollutantmean("specdata", "nitrate", 23)
+## [1] 1.280833
+
+
+
+#SOLUTION-2
+
+complete <- function(directory,id=1:332)
+  
+{
+  
+  filelist <- list.files(path ="C:/Users/ganta.suresh.babu/Downloads/specdata", pattern=".csv", full.names=TRUE)
+  
+  nobs <- numeric()
+  
+  for(i in id)
+  {
+    data<- read.csv(filelist[i])
+    nobs<- c(nobs,  sum(complete.cases(data)))
+  } 
+  data.frame(id, nobs)
+}
+
+
+#Result
+
+complete("specdata", 1)
+##   id nobs
+## 1  1  117
+complete("specdata", c(2, 4, 8, 10, 12))
+##   id nobs
+## 1  2 1041
+## 2  4  474
+## 3  8  192
+## 4 10  148
+## 5 12   96
+complete("specdata", 30:25)
+##   id nobs
+## 1 30  932
+## 2 29  711
+## 3 28  475
+## 4 27  338
+## 5 26  586
+## 6 25  463
+complete("specdata", 3)
+##   id nobs
+## 1  3  243
+
+
+#solution-3
+
+corr <- function(directory, threshold = 0) {
+  
+  files_full <- list.files(path = "C:/Users/ganta.suresh.babu/Downloads/specdata", full.names = TRUE)
+  
+  dat <- vector(mode = "numeric", length = 0)
+  
+  for (i in 1:length(files_full)) 
+    
+  {
+    
+    data <- read.csv(files_full[i])
+    
+    csum <- sum((!is.na(data$sulfate)) & (!is.na(data$nitrate)))
+    
+    if (csum > threshold)
+      
+    {
+      
+      tmp <- data[which(!is.na(data$sulfate)), ]
+      
+      data_i <- tmp[which(!is.na(tmp$nitrate)), ]
+      
+      dat <- c(dat, cor(submoni_i$sulfate, submoni_i$nitrate))
+    }
+  }
+  
+  dat
+}
+
+#Result
+
+dat <- corr("specdata") # default threshold value  is ZERO
+head(dat); summary(dat) ; length(dat)
+## [1] -0.22255256 -0.01895754 -0.14051254 -0.04389737 -0.06815956 -0.12350667
+##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -1.00000 -0.05282  0.10720  0.13680  0.27830  1.00000
+## [1] 323
