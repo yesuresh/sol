@@ -5,6 +5,8 @@ rm.files()
 
 getwd()
 
+setwd("C:/Users/ganta.suresh.babu/Downloads")
+
 pollutantmean <- function(directory, pollutant, id = 1:332) 
 {
   
