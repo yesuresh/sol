@@ -99,7 +99,7 @@ corr <- function(directory, threshold = 0) {
     
     csum <- sum((!is.na(data$sulfate)) & (!is.na(data$nitrate)))#sum of available values of sulphate in data and nitrate in data
     
-    if (csum > threshold)##threshold for complete cases 
+    if (csum > threshold)
       
     {
       
@@ -107,7 +107,7 @@ corr <- function(directory, threshold = 0) {
       
       data_i <- tmp[which(!is.na(tmp$nitrate)), ]
       
-      dat <- c(data, cor(data_i$sulfate, data_i$nitrate))# To findout correlation b/w sulphate and nitrate.
+      dat <- c(data, cor(data_i$sulfate, data_i$nitrate))# To concatinate data and correlation b/w sulphate and nitrate.
     }
   }
   
@@ -116,11 +116,11 @@ corr <- function(directory, threshold = 0) {
 
 #Result
 
-dat <- corr("specdata") 
-head(dat) 
-summary(dat) 
-length(dat)
+dat <- corr("specdata")# To find corr b/w sulphate and nitrate.
 
+head(dat)
+
+summary(dat) 
 
 ## [1] -0.22255256 -0.01895754 -0.14051254 -0.04389737 -0.06815956 -0.12350667
 ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
