@@ -1,29 +1,29 @@
+#Q1: Write a function named ‘pollutantmean’ that calculates the mean of a pollutant (sulfate or nitrate) across a specified list of monitors. The function ‘pollutantmean’ takes three arguments: ‘directory’, ‘pollutant’, and ‘id’. Given a vector monitor ID numbers, ‘pollutantmean’ reads that monitors’ particulate matter data from the directory specified in the ‘directory’ argument and returns the mean of the pollutant across all of the monitors, ignoring any missing values coded as NA.
 #SOLUTION-1
 
+rm.files() #To remove the files.
 
-rm.files()
+getwd() # To get Current Working Directory
 
-getwd()
-
-setwd("C:/Users/ganta.suresh.babu/Downloads")
+setwd("C:/Users/ganta.suresh.babu/Downloads") #Set Working Directory
 
 pollutantmean <- function(directory, pollutant, id = 1:332) 
 {
   
-  filelist <- list.files(path = "C:/Users/ganta.suresh.babu/Downloads/specdata",pattern = ".csv", full.names = TRUE)
+  filelist <- list.files(path = "C:/Users/ganta.suresh.babu/Downloads/specdata",pattern = ".csv", full.names = TRUE) #To List all 332 Files existed in specdata.
   
-  values <- numeric()
+  values <- numeric() ## Function Nuemaric means All the nuemaric values without NA
   
   for(i in id) 
   {
     
-    data <- read.csv(filelist[i])
+    data <- read.csv(filelist[i]) # To read all files existed in specdata 
     
-    values <- c(values, data[[pollutant]])
+    values <- c(values, data[[pollutant]]) # concatinate nuemaric values and pollutant data i.e is "sulphate" or "Nitrate".
     
   }
   
-  mean(values, na.rm = TRUE)
+  mean(values, na.rm = TRUE) # To find mean of values
 }
 
 # Result
@@ -36,7 +36,7 @@ pollutantmean("specdata", "nitrate", 70:72)
 pollutantmean("specdata", "nitrate", 23)
 ## [1] 1.280833
 
-
+##Q2: Write a function that reads a directory full of files and reports the number of completely observed cases in each data file. The function should return a data frame where the first column is the name of the file and the second column is the number of complete cases.
 
 #SOLUTION-2
 
@@ -44,16 +44,16 @@ complete <- function(directory,id=1:332)
   
 {
   
-  filelist <- list.files(path ="C:/Users/ganta.suresh.babu/Downloads/specdata", pattern=".csv", full.names=TRUE)
+  filelist <- list.files(path ="C:/Users/ganta.suresh.babu/Downloads/specdata", pattern=".csv", full.names=TRUE) #To List all 332 Files existed in specdata.
   
-  nobs <- numeric()
+  nobs <- numeric() #complete observed cases in the sense without NA VALUES 
   
   for(i in id)
   {
     data<- read.csv(filelist[i])
     nobs<- c(nobs,  sum(complete.cases(data)))
   } 
-  data.frame(id, nobs)
+  data.frame(id, nobs)# Frame the two variables id,no of observations.
 }
 
 
@@ -81,12 +81,13 @@ complete("specdata", 3)
 ##   id nobs
 ## 1  3  243
 
+##Q3: Write a function that takes a directory of data files and a threshold for complete cases and calculates the correlation between sulfate and nitrate for monitor locations where the number of completely observed cases (on all variables) is greater than the threshold. The function should return a vector of correlations for the monitors that meet the threshold requirement. If no monitors meet the threshold requirement, then the function should return a numeric vector of length 0.
 
 #solution-3
 
 corr <- function(directory, threshold = 0) {
   
-  files_full <- list.files(path = "C:/Users/ganta.suresh.babu/Downloads/specdata", full.names = TRUE)
+  files_full <- list.files(path = "C:/Users/ganta.suresh.babu/Downloads/specdata", full.names = TRUE)#To List all 332 Files existed in specdata.
   
   dat <- vector(mode = "numeric", length = 0)
   
@@ -94,11 +95,11 @@ corr <- function(directory, threshold = 0) {
     
   {
     
-    data <- read.csv(files_full[i])
+    data <- read.csv(files_full[i])# To read data into to R environment.
     
-    csum <- sum((!is.na(data$sulfate)) & (!is.na(data$nitrate)))
+    csum <- sum((!is.na(data$sulfate)) & (!is.na(data$nitrate)))#sum of available values of sulphate in data and nitrate in data
     
-    if (csum > threshold)
+    if (csum > threshold)##threshold for complete cases 
       
     {
       
@@ -106,7 +107,7 @@ corr <- function(directory, threshold = 0) {
       
       data_i <- tmp[which(!is.na(tmp$nitrate)), ]
       
-      dat <- c(dat, cor(submoni_i$sulfate, submoni_i$nitrate))
+      dat <- c(data, cor(data_i$sulfate, data_i$nitrate))# To findout correlation b/w sulphate and nitrate.
     }
   }
   
@@ -116,7 +117,9 @@ corr <- function(directory, threshold = 0) {
 #Result
 
 dat <- corr("specdata") 
-head(dat); summary(dat) ; length(dat)
+head(dat) 
+summary(dat) 
+length(dat)
 
 
 ## [1] -0.22255256 -0.01895754 -0.14051254 -0.04389737 -0.06815956 -0.12350667
